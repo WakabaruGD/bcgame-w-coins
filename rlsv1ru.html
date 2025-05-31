@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Правила игры "Монетный Трон"</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+            margin-top: 30px;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+            color: #856404;
+        }
+        .keyword {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #0d47a1;
+            padding: 2px 6px;
+            margin: 2px 0;
+            border-radius: 4px;
+            border: 1px dashed #bbdefb;
+            font-weight: bold;
+        }
+        .term {
+            background: #d1ecf1;
+            color: #0c5460;
+            font-weight: bold;
+            padding: 0 4px;
+        }
+        .important {
+            color: #c0392b;
+            font-weight: bold;
+        }
+        .phase {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-left: 4px solid #4caf50;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .phase-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #2e7d32;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .footer {
+            margin-top: 40px;
+            font-style: italic;
+            text-align: center;
+            color: #7f8c8d;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Правила игры "Монетный Трон"</h1>
+
+    <p><span class="highlight">Монетный Трон</span> - это игра с использованием монеток для <span class="important">2-3 игроков</span>.</p>
+
+    <h2>Цель игры</h2>
+    <p>Набрать <span class="important">>6 очков</span>. 
+    <br><span class="term">Решка</span> дает <span class="keyword">2 очка</span>, 
+    <span class="term">Орел</span> - <span class="keyword">1 очко</span>. 
+    <br>Очки даются за <span class="term">Повышенные монеты</span>, которые зарабатываются в ходе игры.</p>
+
+    <h2>Компоненты</h2>
+    <ul>
+        <li>По <span class="keyword">7 монет</span> на игрока</li>
+        <li>1 <span class="term">маркер Лидера</span> (правила игры)</li>
+    </ul>
+
+    <h2>Подготовка</h2>
+    <ul>
+        <li>Все игроки кладут 7 монет в 1 стопку орлом вверх - это <span class="term">Стопка Орлов</span></li>
+        <li>Оставьте место для будущей <span class="term">Стопки Решек</span> и <span class="term">Зоны Повышенных монет</span></li>
+        <li>Игрок, предложивший сыграть, становится <span class="term">Лидером</span> (берет правила игры)</li>
+    </ul>
+
+    <div class="phase">
+        <div class="phase-title">РАУНД:</div>
+        
+        <h3>1. Скрытая ставка</h3>
+        <ul>
+            <li>Игрок берет монету, лежащую орлом вверх, из <span class="term">Стопки Орлов</span></li>
+            <li><span class="important">Если после взятия монеты стопка пуста</span>: 
+                верните верхнюю монету из <span class="term">Стопки Решек</span> в 
+                <span class="term">Стопку Орлов</span> <span class="keyword">решкой вверх</span>. 
+                Затем верните остальные монеты из <span class="term">Стопки Решек</span> 
+                <span class="keyword">орлом вверх</span>.</li>
+            <li><span class="important">Если нельзя взять монету</span> (есть только 1 монета, лежащая решкой вверх): 
+                начинается <span class="term">ФИНАЛ</span>.</li>
+            <li>Игрок скрытно выбирает сторону взятой монеты (<span class="term">О</span>/<span class="term">Р</span>) 
+                в качестве ставки.</li>
+        </ul>
+
+        <h3>2. Раскрытие</h3>
+        <p>Все одновременно открывают свои ставки.</p>
+
+        <h3>3. Результат</h3>
+        <p><span class="term">Согласие</span> (все ставки одинаковы):</p>
+        <ul>
+            <li>Маркер <span class="term">Лидера</span> передается следующему игроку по часовой стрелке</li>
+            <li>Новый <span class="term">Лидер</span> <span class="term">Повышает</span> ставку 
+                <span class="keyword">орлом вверх</span></li>
+            <li>Все возвращают ставки в <span class="term">Стопку Решек</span> 
+                <span class="keyword">решкой вверх</span> (если она пуста - формируют Стопку Решек)</li>
+        </ul>
+
+        <p><span class="term">Несогласие</span> (ставки разные): по очереди, начиная с 
+        <span class="term">Лидера</span> и далее по часовой стрелке, игроки применяют эффект своей ставки:</p>
+        <ul>
+            <li><span class="keyword">Любая ставка Лидера</span>: Лидер <span class="term">повышает</span> 
+                ставку той стороной вверх, которой поставил</li>
+            <li><span class="keyword">Орел (кроме Лидера)</span>: игрок забирает маркер 
+                <span class="term">Лидера</span> и <span class="term">Повышает</span> ставку 
+                <span class="keyword">орлом вверх</span></li>
+            <li><span class="keyword">Решка (кроме Лидера)</span>: 
+                <ul>
+                    <li>Игрок берет верхнюю монету из <span class="term">Стопки Орлов</span></li>
+                    <li>Кладет в <span class="term">Стопку Решек</span> 
+                        <span class="keyword">решкой вверх</span></li>
+                    <li>Возвращает ставку <span class="keyword">решкой вверх</span></li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>4. Трансформация</h3>
+        <p>Если у игрока в <span class="term">Зоне Повышенных монет</span> орлом вверх лежит 
+        <span class="important">2 монеты</span>, он должен:</p>
+        <ul>
+            <li>Перевернуть одну из этих монет <span class="keyword">решкой вверх</span></li>
+            <li>Другую отправить в <span class="term">Стопку Решек</span> 
+                <span class="keyword">решкой вверх</span></li>
+        </ul>
+
+        <h3>5. Проверка победы</h3>
+        <p>Побеждает любой игрок, чья сумма очков за <span class="term">Повышенные монеты</span> 
+        <span class="important">>6 и больше, чем у других</span>. 
+        При равенстве - играем дальше с текущим <span class="term">Лидером</span>.</p>
+    </div>
+
+    <h2>ФИНАЛ</h2>
+    <ul>
+        <li>Игрок, у которого раньше всех закончились монеты для ставок, становится <span class="term">Лидером</span></li>
+        <li>Игроки могут использовать для ставки любую монету из любой стопки 
+            (но не из <span class="term">Зоны Повышенных монет</span>)</li>
+        <li>Игроки делятся на команды: 
+            <span class="term">Узурпатор</span> (только Лидер) vs 
+            <span class="term">Претенденты</span> (остальные игроки)</li>
+        <li><span class="term">Ставка</span>: Претенденты тайно договариваются об одной ставке. 
+            Все делают скрытую ставку, раскрывают одновременно</li>
+        <li><span class="term">Результат</span>:
+            <ul>
+                <li><span class="term">Лидер побеждает</span> при любых 
+                    <span class="keyword">РАЗНЫХ</span> ставках</li>
+                <li><span class="term">Аутсайдеры побеждают</span> при любых 
+                    <span class="keyword">ОДИНАКОВЫХ</span> ставках</li>
+            </ul>
+        </li>
+        <li>Каждый в победившей команде <span class="term">Повышает</span> свою ставку 
+            <span class="keyword">решкой вверх</span></li>
+        <li><span class="term">Итог</span>: Суммируйте все <span class="term">Повышенные монеты</span> 
+            (<span class="term">О</span>=<span class="keyword">1</span>, 
+            <span class="term">Р</span>=<span class="keyword">2</span>). 
+            Побеждает игрок с самой большой суммой. При равенстве побеждает 
+            <span class="term">Лидер</span> или ближайший к получению маркера Лидера.</li>
+    </ul>
+
+    <h2>Ключевые термины</h2>
+    <ul>
+        <li><span class="term">Повысить</span>: отложить ставку в <span class="term">Зону Повышенных монет</span> (дают очки)</li>
+        <li><span class="term">Лидер</span>: Игрок с маркером Лидера (правилами)</li>
+        <li><span class="term">Стопка Орлов</span>: отсюда берутся монеты для ставки (можно брать только монеты орлом вверх)</li>
+        <li><span class="term">Стопка Решек</span>: сюда возвращаются монеты решкой вверх, если ставку не Повысили</li>
+        <li><span class="term">Финал</span>: раунд с особыми правилами, завершающий игру</li>
+    </ul>
+
+    <div class="footer">Монетный Трон © Правила игры</div>
+</body>
+</html>
