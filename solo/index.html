@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Решечный Гамбит: Соло - Правила игры</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #2c3e50;
+            --secondary: #e74c3c;
+            --accent: #f39c12;
+            --light: #ecf0f1;
+            --dark: #1a252f;
+            --inflation: #9b59b6;
+            --inflation-equal: #3498db;
+            --inflation-streak: #9b59b6;
+            --coin-gold: linear-gradient(145deg, #ffd700, #daa520);
+            --coin-silver: linear-gradient(145deg, #c0c0c0, #a9a9a9);
+            --solo-accent: #1abc9c;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a3a, #2c3e50);
+            color: var(--light);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(135deg, rgba(26, 37, 47, 0.95), rgba(44, 62, 80, 0.8)); 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
+            max-width: 75%; 
+            margin: 0 auto;
+            padding: 10px 15px;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #1abc9c;
+            text-shadow: 
+                0 0 15px rgba(26, 188, 156, 0.7),
+                0 4px 6px rgba(0,0,0,0.8);
+            animation: pulse 2s infinite;
+        }
+        
+        .solo-subtitle {
+            color: var(--solo-accent);
+            font-weight: bold;
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            color: var(--light);
+            max-width: 800px;
+            margin: 0 auto 10px;
+            font-weight: 300;
+            padding: 0 10px;
+        }
+        
+        .coins-decoration {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .coin {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: float 8s infinite ease-in-out;
+        }
+        
+        .coin.heads {
+            background: var(--coin-gold);
+            color: var(--dark);
+        }
+        
+        .coin.tails {
+            background: var(--coin-silver);
+            color: var(--dark);
+        }
+        
+        .game-rules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .rule-card {
+            background: rgba(44, 62, 80, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .rule-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+        
+        .rule-card h2 {
+            color: var(--solo-accent);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .rule-card h2 .svg-icon {
+            background: var(--primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .phase-section {
+            background: rgba(26, 37, 47, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .phase-section h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--solo-accent);
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .phase {
+            background: rgba(44, 62, 80, 0.7);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s;
+            border-left: 4px solid var(--solo-accent);
+        }
+        
+        .phase:hover {
+            background: rgba(52, 73, 94, 0.8);
+            transform: translateX(5px);
+        }
+        
+        .phase h3 {
+            color: var(--solo-accent);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .phase-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--solo-accent);
+            color: rgba(44, 62, 80, 1);
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.25rem;
+        }
+        
+        .phase-content {
+            padding-left: 15px;
+            border-left: 2px solid rgba(46, 204, 113, 0.3);
+            margin-left: 10px;
+        }
+        
+        .highlight {
+            color: var(--solo-accent);
+            font-weight: bold;
+        }
+        
+        .solo-highlight {
+            background: rgba(26, 188, 156, 0.15);
+            padding: 3px 8px;
+            border-radius: 5px;
+            color: var(--solo-accent);
+            font-weight: bold;
+        }
+        
+        .opponent-highlight {
+            background: rgba(231, 76, 60, 0.15);
+            padding: 3px 8px;
+            border-radius: 5px;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+        
+        .inflation-highlight {
+            color: var(--inflation);
+            font-weight: bold;
+            background: rgba(155, 89, 182, 0.15);
+            padding: 3px 8px;
+            border-radius: 5px;
+        }
+        
+        .inflation-equal {
+            color: var(--inflation-equal);
+            font-weight: bold;
+            background: rgba(52, 152, 219, 0.15);
+            padding: 3px 8px;
+            border-radius: 5px;
+        }
+        
+        .inflation-streak {
+            color: var(--inflation-streak);
+            font-weight: bold;
+            background: rgba(155, 89, 182, 0.15);
+            padding: 3px 8px;
+            border-radius: 5px;
+        }
+        
+        .inflation-box {
+            background: rgba(26, 37, 47, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid var(--inflation);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .inflation-type {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed rgba(255,255,255,0.2);
+        }
+        
+        .inflation-type > div:last-child {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        
+        .inflation-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.6rem;
+            margin-right: 15px;
+            margin-left: 5px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            color: rgba(26, 37, 47, 1) !important;
+        }
+        
+        .inflation-equal .inflation-icon {
+            background: var(--inflation-equal);
+        }
+        
+        .inflation-streak .inflation-icon {
+            background: var(--inflation-streak);
+        }
+        
+        .end-game {
+            background: rgba(26, 37, 47, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .end-game h2 {
+            color: var(--solo-accent);
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+        }
+        
+        .end-game > p {
+            margin-bottom: 25px;
+        }
+        
+        .gladiator-note {
+            background: rgba(231, 76, 60, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 25px;
+            font-style: italic;
+            border: 1px dashed var(--secondary);
+        }
+        
+        .gladiator-note p {
+            margin: 0;
+        }
+        
+        .rule-card ul, 
+        .rule-card ol,
+        .phase-content ul,
+        .phase-content ol,
+        .inflation-box ul,
+        .inflation-box ol,
+        .end-game ol {
+            padding-left: 20px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .rule-card li,
+        .phase-content li,
+        .inflation-box li,
+        .end-game li {
+            margin-bottom: 8px;
+            position: relative;
+            left: 5px;
+        }
+        
+        .inflation-box > p:first-of-type {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .opponent-info {
+            background: rgba(231, 76, 60, 0.15);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 3px solid var(--secondary);
+        }
+        
+        .opponent-info h4 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .opponent-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+        
+        @keyframes pulse { 
+            0%, 100% { 
+                text-shadow: 0 0 15px var(--solo-accent), 0 4px 6px rgba(0,0,0,1); 
+            } 
+            50% { 
+                text-shadow: 0 0 25px var(--solo-accent), 0 0 40px var(--solo-accent), 0 4px 6px rgba(0,0,0,1); 
+            } 
+        }
+        
+        /* Исправления для SVG */
+        .svg-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .svg-icon svg {
+            width: 24px;
+            height: 24px;
+            max-width: 100%;
+            max-height: 100%;
+            fill: currentColor;
+        }
+        
+        .inline-icon {
+            display: inline-flex;
+            align-items: center;
+            width: 1em;
+            height: 1em;
+            vertical-align: baseline;
+            position: relative;
+            top: 0.15em;
+            margin-right: 0.3em;
+        }
+        
+        .inline-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: currentColor;
+        }
+        
+        .inflation-icon .svg-icon svg {
+            width: 30px;
+            height: 30px;
+        }
+        
+        /* Решение проблем */
+        .end-game .phase .phase-content {
+            text-align: left;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle { 
+                font-size: 1.1rem;
+                margin-bottom: 15px;
+            }
+            
+            .game-rules {
+                grid-template-columns: 1fr;
+            }
+            
+            .inflation-row {
+                flex-wrap: wrap;
+            }
+            
+            .header-content {
+                max-width: 90%;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="coins-decoration" id="coinsContainer"></div>
+            <div class="header-content">
+                <h1>Решечный Гамбит: Соло</h1>
+                <p class="subtitle">Играйте против Госпожи Удачи в одиночном режиме</p>
+                <p class="subtitle"><span class="solo-subtitle">Особые правила для соло-режима</span></p>
+            </div>
+        </header>
+        
+        <div class="game-rules">
+            <div class="rule-card">
+                <h2>
+                    <span class="svg-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M399 384c-22-38-64-64-111-64h-64c-47 0-89 26-111 64a192 192 0 0 0 286 0zM0 256a256 256 0 1 1 512 0 256 256 0 1 1-512 0zm256 16a72 72 0 1 0 0-144 72 72 0 1 0 0 144z"/></svg>
+                    </span>
+                    Особенности Соло
+                </h2>
+                <p>В этом режиме вы играете против <span class="opponent-highlight">Госпожи Удачи</span>, действия которого определяются подбрасыванием монет.</p>
+                <p>Госпожа имеет <span class="highlight">бесконечный запас монет</span> и некоторые особые правила, которые компенсируют отсутствие стратегии с ее стороны.</p>
+            </div>
+            
+            <div class="rule-card">
+                <h2>
+                    <span class="svg-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M320 0a128 128 0 1 1 0 256 128 128 0 1 1 0-256zM40 64c22 0 40 18 40 40v160c0 17 7 33 19 45l51 52a25 25 0 1 0 35-35l-16-15-32-32a32 32 0 0 1 46-46l32 32 15 16 25 25c21 21 33 49 33 79v79c0 27-22 48-48 48h-67c-17 0-33-7-45-19L28 393a96 96 0 0 1-28-67V104c0-22 18-40 40-40zm560 0c22 0 40 18 40 40v222c0 25-10 49-28 67L512 493a64 64 0 0 1-45 19h-67c-26 0-48-21-48-48v-79c0-30 12-58 33-79l25-25 15-16 32-32a32 32 0 0 1 46 46l-32 32-16 15a25 25 0 1 0 35 35l51-51c12-12 19-29 19-46V104c0-22 18-40 40-40z"/></svg>
+                    </span>
+                    Подготовка
+                </h2>
+                <ol>
+                    <li>Подготовьте <span class="highlight">две игровые зоны</span>: вашу и Госпожи</li>
+                    <li>Ваша зона включает: <span class="highlight">Актив (7 монет)</span>, <span class="highlight">Рука</span>, <span class="highlight">Сундук</span></li>
+                    <li>Зона Госпожи включает: <span class="opponent-highlight">Актив (бесконечный)</span>, <span class="opponent-highlight">Рука</span>, <span class="opponent-highlight">Сундук</span></li>
+                    <li>Содержимое <span class="highlight">Руки Госпожи</span> не ясно до броска ее монет</li>
+                    <li>Положите визитку в центр стола</li>
+                </ol>
+            </div>
+            
+            <div class="rule-card">
+                <h2>
+                    <span class="svg-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M309 106a40 40 0 1 0-42 0l-57 115c-9 18-33 23-49 10l-89-71a40 40 0 1 0-32 16h1l45 251c6 31 32 53 63 53h278c31 0 57-22 63-53l45-251h1a40 40 0 1 0-32-16l-89 71c-16 13-40 8-49-10l-57-115z"/></svg>
+                    </span>
+                    Госпожа
+                </h2>
+                <p>Удача компенсирует отсутствие стратегии следующими преимуществами:</p>
+                <ul>
+                    <li>В фазе <span class="highlight">Пополнения Руки</span> она берет <span class="opponent-highlight">2 монеты</span> вместо одной</li>
+                    <li>Ее <span class="opponent-highlight">Актив бесконечен</span> (запаситесь монетами)</li>
+                    <li>При эффекте решки она всегда возвращает монету <span class="opponent-highlight">орлом вверх</span> (если возможно)</li>
+                    <li>Игра не заканчивается при 7 монетах в ее сундуке</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="phase-section">
+            <h2>Фазы раунда для соло-режима</h2>
+            
+            <div class="opponent-info">
+                <h4><span class="opponent-icon">!</span> Влияние на Удачу</h4>
+                <p>Госпожа не принимает решений - все ее действия определяются случайностью через подбрасывание монет.</p>
+                <p>Вы выполняете физические действия за Госпожу, но не принимаете решений за нее.</p>
+            </div>
+            
+            <div class="phase">
+                <h3><span class="phase-number">0</span> Пополнение Руки</h3>
+                <div class="phase-content">
+                    <p>Вы: Возьмите <span class="highlight">1 монету</span> из своего <span class="highlight">Актива</span> в свою <span class="highlight">Руку</span>.</p>
+                    <p>Госпожа: Возьмите <span class="opponent-highlight">2 монеты</span> из ее <span class="opponent-highlight">Актива</span> в ее <span class="opponent-highlight">Руку</span>.</p>
+                    <p><em>Если ваш Актив пуст, пропустите свое пополнение.</em></p>
+                </div>
+            </div>
+            
+            <div class="phase">
+                <h3><span class="phase-number">1</span> Тайная Ставка</h3>
+                <div class="phase-content">
+                    <p>Для <span class="highlight">каждой монеты</span> в вашей Руке <span class="highlight">тайно</span> выберите сторону: <span class="highlight">Орел</span> или <span class="highlight">Решка</span>.</p>
+                    <p>Для Госпожи: <span class="opponent-highlight">не делайте выбор</span> - ставки будут определены подбрасыванием.</p>
+                </div>
+            </div>
+            
+            <div class="phase">
+                <h3><span class="phase-number">2</span> Раскрытие Ставок</h3>
+                <div class="phase-content">
+                    <p>Раскройте свои ставки (монеты в Руке) с выбранными сторонами.</p>
+                    <p>Для противника: <span class="opponent-highlight">подбросьте каждую монету</span> из ее Руки. Результат подбрасывания определяет ее ставку.</p>
+                    <p>Разложите монеты противника так, чтобы видеть верхнюю сторону.</p>
+                </div>
+            </div>
+            
+            <div class="phase">
+                <h3><span class="phase-number">3</span> Определение Большинства</h3>
+                <div class="phase-content">                    
+                    <p>Посчитайте <span class="highlight">общее количество</span> монет со стороной <span class="highlight">Орел</span> и <span class="highlight">Решка</span>, раскрытых вами и Госпожой.</p>
+                    
+                    <p>Если одна из сторон представлена <span class="highlight">БОЛЬШЕ</span> раз, чем другая:</p>
+                    <ul>
+                        <li>Все монеты <span class="highlight">преобладающей стороны</span> отправляются из Руки в Сундук своего владельца</li>
+                        <li>Монеты <span class="highlight">меньшинства</span> остаются в Руке</li>
+                    </ul>
+                    
+                    <div class="inflation-box">
+                        <h3 class="inflation-highlight" style="text-align: center; margin-bottom: 20px;">
+                            <span class="inline-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M64 64a32 32 0 1 0-64 0v336c0 44 36 80 80 80h400a32 32 0 1 0 0-64H80c-9 0-16-7-16-16V64zm407 87a32 32 0 0 0-46-46L320 211l-57-58a32 32 0 0 0-46 0L105 265a32 32 0 0 0 46 46l89-90 57 58c13 12 33 12 46 0l128-128z"/></svg>
+                            </span>
+                            Инфляция в соло-режиме
+                        </h3>
+                        
+                    <div style="text-align: center; margin-bottom: 20px; padding-top: 5px; border-top: 1px dashed rgba(155, 89, 182, 0.15);">
+                        <p>Правила Инфляции работают как в обычной игре.</p>
+                    </div>
+                        <div class="inflation-type inflation-equal">
+                            <div class="inflation-icon">
+                                <span class="svg-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M384 32h128a32 32 0 1 1 0 64H398c-5 26-23 47-46 57v295h160a32 32 0 1 1 0 64H128a32 32 0 1 1 0-64h160V153a80 80 0 0 1-46-57H128a32 32 0 1 1 0-64h128a80 80 0 0 1 128 0zm56 288h145l-73-124-72 124zm72 96c-63 0-115-34-126-79-3-11 1-22 7-32l95-163a28 28 0 0 1 48 0l95 163c6 10 10 21 7 32-11 45-63 79-126 79zM127 196 54 320h145l-72-124zM1 337c-3-11 1-22 7-32l95-163a28 28 0 0 1 48 0l95 163c6 10 9 21 7 32-11 45-63 79-126 79S12 382 1 337z"/></svg>
+                                </span>
+                            </div>
+                            <div>
+                                <h4>Равенство ставок</h4>
+                                <p>Если количество Орлов <span class="inflation-equal">РАВНО</span> количеству Решек - <span class="highlight">возникает Инфляция</span></p>
+                            </div>
+                        </div>
+                        
+                        <div class="inflation-type inflation-streak">
+                            <div class="inflation-icon">
+                                <span class="svg-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M105 203a160 160 0 0 1 264-60l17 17h-34a32 32 0 1 0 0 64h112c18 0 32-14 32-32V80a32 32 0 1 0-64 0v35l-18-17a224 224 0 0 0-369 83 32 32 0 0 0 60 22zm-66 86a32 32 0 0 0-23 31v112a32 32 0 1 0 64 0v-35l18 17a224 224 0 0 0 369-83 32 32 0 0 0-60-22 160 160 0 0 1-264 60l-17-17h34a32 32 0 1 0 0-64H48a39 39 0 0 0-9 1z"/></svg>
+                                </span>
+                            </div>
+                            <div>
+                                <h4>Повторное единство</h4>
+                                <p>Если так совпало, что все монеты выложены <span class="inflation-streak">одинаковой стороной</span>, маркер Инфляции становится активным. Если при активном маркере монеты опять оказались одинаковы - <span class="highlight">возникает Инфляция</span></p>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px dashed rgba(155, 89, 182, 0.15);">
+                            <h4><span class="highlight">
+                                <span class="inline-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 32c14 0 27 8 35 20l216 368a40 40 0 0 1-35 60H40a40 40 0 0 1-34-60L222 52c7-12 20-20 34-20zm0 128c-13 0-24 11-24 24v112a24 24 0 1 0 48 0V184c0-13-11-24-24-24zm32 224a32 32 0 1 0-64 0 32 32 0 1 0 64 0z"/></svg>
+                                </span>
+                                Результат Инфляции
+                            </span></h4>
+                            <p>При возникновении Инфляции:</p>
+                                <p>◖   <span class="inflation-highlight">Большинства НЕТ</span>   ◗</p>
+                                <p>◖   <span class="inflation-highlight">ВСЕ</span> монеты остаются в Руках своих владельцев   ◗</p>
+                                <p>◖   Все монеты считаются монетами <span class="inflation-highlight">МЕНЬШИНСТВА</span>   ◗</p>
+                                <p>◖   Переверните визитку маркером Инфляции вниз   ◗</p>
+                        </div>
+                    </div>
+				</div>
+			</div>
+			            
+            <div class="phase">
+                <h3><span class="phase-number">4</span> Эффекты Сторон</h3>
+                <div class="phase-content">
+                    <p>Только монеты, оставшиеся в Руке после фазы 3 (монеты меньшинства), разыгрывают свои эффекты.</p>
+                    
+                    <p><strong>Ваши эффекты:</strong></p>
+                    <ul>
+                        <li><span class="highlight">Орел:</span> Если в вашем Активе есть монеты, возьмите 1 монету из Актива и положите в Сундук <span class="highlight">решкой вверх</span></li>
+                        <li><span class="highlight">Решка:</span> Если в вашем Сундуке есть монеты, верните 1 любую монету из Сундука в Руку</li>
+                    </ul>
+                    
+                    <p><strong>Эффекты Госпожи:</strong></p>
+                    <ul>
+                        <li><span class="opponent-highlight">Орел:</span> Возьмите 1 монету из ее Актива и положите в ее Сундук <span class="opponent-highlight">решкой вверх</span></li>
+                        <li><span class="opponent-highlight">Решка:</span> Если в ее Сундуке есть монеты, верните одну из Сундука в ее Руку. Если возможно, всегда выбирайте монету, лежащую <span class="opponent-highlight">орлом вверх</span>.</li>
+                    </ul>
+                    
+                    <p><em>Если эффект невозможно выполнить, он пропускается</em></p>
+                </div>
+            </div>
+        </div>
+		
+        <div class="end-game">
+            <h2>КОНЕЦ ИГРЫ В СОЛО-РЕЖИМЕ</h2>
+            <p>Игра заканчивается <span class="highlight">немедленно</span> при выполнении одного из условий:</p>
+            
+            <div class="phase">
+                <h3><span class="phase-number">А</span> Ваш Сундук</h3>
+                <div class="phase-content">
+                    <p>Когда в <span class="highlight">вашем Сундуке</span> оказываеются <span class="solo-highlight">все 7 монет</span>.</p>
+                </div>
+            </div>
+            
+            <div class="phase">
+                <h3><span class="phase-number">Б</span> Сундук Госпожи</h3>
+                <div class="phase-content">
+                    <p>Когда в <span class="opponent-highlight">Сундуке Госпожи</span> 7 монет <span class="opponent-highlight">лежат решкой вверх</span>.</p>
+                </div>
+            </div>           
+            <div class="phase">
+                <h3><span class="phase-number">!</span> Определение победителя</h3>
+                <div class="phase-content">
+                    <ol>
+                        <li>Как и в обычной игре, побеждает тот, у кого <span class="highlight">больше монет, лежащих решкой вверх</span> в его Сундуке</li>
+                        <li>При равенстве: тот, у кого в Сундуке <span class="highlight">меньше монет, лежащих орлом вверх</span></li>
+                        <li>При полном равенстве: <span class="highlight">арена с дикими тиграми</span> определит вашу судьбу</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="gladiator-note">
+                <p>
+                    <span class="inline-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 32c14 0 27 8 35 20l216 368a40 40 0 0 1-35 60H40a40 40 0 0 1-34-60L222 52c7-12 20-20 34-20zm0 128c-13 0-24 11-24 24v112a24 24 0 1 0 48 0V184c0-13-11-24-24-24zm32 224a32 32 0 1 0-64 0 32 32 0 1 0 64 0z"/></svg>
+                    </span>
+                    Совет: Приготовьте тигриные лакомства на случай ничьей!
+                </p>
+            </div>
+		</div>
+		<footer>
+			<p>2025 Решечный Гамбит: Соло | Одиночное дополнение к Решечному Гамбиту | Удачи в борьбе с Удачей!</p>
+			<div>Иконки: Font Awesome (CC BY 4.0)</div>
+		</footer>
+			
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const coinsContainer = document.getElementById('coinsContainer');
+            const coinsCount = 25;
+            
+            for (let i = 0; i < coinsCount; i++) {
+                const coin = document.createElement('div');
+                coin.classList.add('coin');
+                
+                if (Math.random() > 0.5) {
+                    coin.classList.add('heads');
+                } else {
+                    coin.classList.add('tails');
+                }
+                
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                
+                coin.style.left = `${posX}%`;
+                coin.style.top = `${posY}%`;
+                
+                const size = 30 + Math.random() * 40;
+                coin.style.width = `${size}px`;
+                coin.style.height = `${size}px`;
+                
+                const delay = Math.random() * 5;
+                coin.style.animationDelay = `${delay}s`;
+                
+                const duration = 5 + Math.random() * 10;
+                coin.style.animationDuration = `${duration}s`;
+                
+                coinsContainer.appendChild(coin);
+            }
+        });
+    </script>
+</body>
+</html>
