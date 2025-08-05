@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Решечный Гамбит - Правила игры</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #2c3e50;
+            --secondary: #e74c3c;
+            --accent: #f39c12;
+            --light: #ecf0f1;
+            --dark: #1a252f;
+            --inflation: #9b59b6;
+            --inflation-equal: #3498db;
+            --inflation-streak: #9b59b6;
+            --coin-gold: linear-gradient(145deg, #ffd700, #daa520);
+            --coin-silver: linear-gradient(145deg, #c0c0c0, #a9a9a9);
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a3a, #2c3e50);
+            color: var(--light);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(135deg, rgba(26, 37, 47, 0.95), rgba(44, 62, 80, 0.8)); 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
+            max-width: 75%; 
+            margin: 0 auto;
+            padding: 10px 15px;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #ffd700;
+            text-shadow: 
+                0 0 15px rgba(255, 215, 0, 0.7),
+                0 4px 6px rgba(0,0,0,0.8);
+            animation: pulse 2s infinite;
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            color: var(--light);
+            max-width: 800px;
+            margin: 0 auto 10px;
+            font-weight: 300;
+            padding: 0 10px;
+        }
+        
+        .coins-decoration {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .coin {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: float 8s infinite ease-in-out;
+        }
+        
+        .coin.heads {
+            background: var(--coin-gold);
+            color: var(--dark);
+        }
+        
+        .coin.tails {
+            background: var(--coin-silver);
+            color: var(--dark);
+        }
+        
+        .game-rules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .rule-card {
+            background: rgba(44, 62, 80, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .rule-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+        
+        .rule-card h2 {
+            color: var(--accent);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .rule-card h2 .svg-icon {
+            background: var(--primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .phase-section {
+            background: rgba(26, 37, 47, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .phase-section h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--accent);
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .phase {
+            background: rgba(44, 62, 80, 0.7);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .phase:hover {
+            background: rgba(52, 73, 94, 0.8);
+            transform: translateX(5px);
+        }
+        
+        .phase h3 {
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .phase-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            color: rgba(44, 62, 80, 1);
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.25rem;
+        }
+        
+        .phase-content {
+            padding-left: 15px;
+            border-left: 2px solid rgba(243, 156, 18, 0.3);
+            margin-left: 10px;
+        }
+        
+        .highlight {
+            color: var(--accent);
+            font-weight: bold;
+        }
+        
+        .inflation-highlight {
+            color: var(--inflation);
+            font-weight: bold;
+            background: rgba(155, 89, 182, 0.15);
+            padding: 3px 8px;
+            border-radius: 5px;
+        }
+        
+        .inflation-equal {
+            color: var(--inflation-equal);
+            font-weight: bold;
+            background: rgba(52, 152, 219, 0.15);
+            padding: 3px 8px;
+            border-radius: 5px;
+        }
+        
+        .inflation-streak {
+            color: var(--inflation-streak);
+            font-weight: bold;
+            background: rgba(155, 89, 182, 0.15);
+            padding: 3px 8px;
+            border-radius: 5px;
+        }
+        
+        .inflation-box {
+            background: rgba(26, 37, 47, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid var(--inflation);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .inflation-type {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed rgba(255,255,255,0.2);
+        }
+        
+        .inflation-type > div:last-child {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        
+        .inflation-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.6rem;
+            margin-right: 15px;
+            margin-left: 5px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            color: rgba(26, 37, 47, 1) !important;
+        }
+        
+        .inflation-equal .inflation-icon {
+            background: var(--inflation-equal);
+        }
+        
+        .inflation-streak .inflation-icon {
+            background: var(--inflation-streak);
+        }
+        
+        .end-game {
+            background: rgba(26, 37, 47, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .end-game h2 {
+            color: var(--accent);
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+        }
+        
+        .end-game > p {
+            margin-bottom: 25px;
+        }
+        
+        .gladiator-note {
+            background: rgba(231, 76, 60, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 25px;
+            font-style: italic;
+            border: 1px dashed var(--secondary);
+        }
+        
+        .gladiator-note p {
+            margin: 0;
+        }
+        
+        .rule-card ul, 
+        .rule-card ol,
+        .phase-content ul,
+        .phase-content ol,
+        .inflation-box ul,
+        .inflation-box ol,
+        .end-game ol {
+            padding-left: 20px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .rule-card li,
+        .phase-content li,
+        .inflation-box li,
+        .end-game li {
+            margin-bottom: 8px;
+            position: relative;
+            left: 5px;
+        }
+        
+        .inflation-box > p:first-of-type {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+        
+        @keyframes pulse { 
+            0%, 100% { 
+                text-shadow: 0 0 15px var(--accent), 0 4px 6px rgba(0,0,0,1); 
+            } 
+            50% { 
+                text-shadow: 0 0 25px var(--accent), 0 0 40px var(--accent), 0 4px 6px rgba(0,0,0,1); 
+            } 
+        }
+        
+        /* Исправления для SVG */
+        .svg-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .svg-icon svg {
+            width: 24px;
+            height: 24px;
+            max-width: 100%;
+            max-height: 100%;
+            fill: currentColor;
+        }
+        
+        .inline-icon {
+            display: inline-flex;
+            align-items: center;
+            width: 1em;
+            height: 1em;
+            vertical-align: baseline;
+            position: relative;
+            top: 0.15em;
+            margin-right: 0.3em;
+        }
+        
+        .inline-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: currentColor;
+        }
+        
+        .inflation-icon .svg-icon svg {
+            width: 30px;
+            height: 30px;
+        }
+        
+        /* Решение проблем */
+        .end-game .phase .phase-content {
+            text-align: left;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle { 
+                font-size: 1.1rem;
+                margin-bottom: 15px;
+            }
+            
+            .game-rules {
+                grid-template-columns: 1fr;
+            }
+            
+            .inflation-row {
+                flex-wrap: wrap;
+            }
+            
+            .header-content {
+                max-width: 90%;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="coins-decoration" id="coinsContainer"></div>
+            <div class="header-content">
+                <h1>Решечный Гамбит</h1>
+                <p class="subtitle">Стратегическая игра с монетами для 2-8 игроков, где ваши тайные ставки определяют победителя</p>
+            </div>
+        </header>
+        
+        <div class="game-rules">
+            <div class="rule-card">
+                <h2>
+                    <span class="svg-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M448 256a192 192 0 1 0-384 0 192 192 0 1 0 384 0zM0 256a256 256 0 1 1 512 0 256 256 0 1 1-512 0zm256 80a80 80 0 1 0 0-160 80 80 0 1 0 0 160zm0-224a144 144 0 1 1 0 288 144 144 0 1 1 0-288zm-32 144a32 32 0 1 1 64 0 32 32 0 1 1-64 0z"/></svg>
+                    </span>
+                    Цель игры
+                </h2>
+                <p>В конце партии иметь в <span class="highlight">своем сундуке</span> больше монет, лежащих <span class="highlight">решкой вверх</span>, чем у других игроков.</p>
+                <p>Победные очки даются за удачно поставленные монеты. Неудачно поставленные монеты дают штрафные очки.</p>
+            </div>
+            
+            <div class="rule-card">
+                <h2>
+                    <span class="svg-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M512 80c0 18-14 35-38 48-29 16-73 28-123 31l-11-5a395 395 0 0 0-172-25l-2-1c-24-13-38-30-38-48 0-44 86-80 192-80s192 36 192 80zm-351 81 31-1c62 0 117 12 153 31 24 14 39 31 39 49l-2 12c-5 13-17 25-35 35h-1 1l-1 1c-35 19-91 32-154 32a344 344 0 0 1-154-32c-24-13-38-30-38-48 0-35 53-64 128-75l33-4zm255 79c0-22-11-40-24-53 28-5 54-12 76-21 16-7 32-15 44-25v35c0 19-17 37-44 51-14 7-32 14-52 18v-5zm-32 96c0 18-14 35-38 48l-6 3c-35 18-88 29-148 29-63 0-119-13-154-32-24-13-38-30-38-48v-35c13 10 28 18 44 25 39 17 92 26 148 26a396 396 0 0 0 171-37l17-11 4-3v35zm32 0v-58c19-4 37-9 52-16 16-7 32-15 44-25v35c0 11-5 21-15 31-16 16-45 30-81 38v-5zM192 448c56 0 109-9 148-26 16-7 32-15 44-25v35c0 44-86 80-192 80S0 476 0 432v-35c13 10 28 18 44 25 39 17 92 26 148 26z"/></svg>
+                    </span>
+                    Компоненты
+                </h2>
+                <p>Для игры потребуются:</p>
+                <ul>
+                    <li>Монеты (7 для каждого игрока)</li>
+                    <li>Обозначения зон (актив, рука, сундук) для каждого игрока</li>
+                    <li>Маркер Инфляции (на той же стороне визитки, где ссылка на эти правила)</li>
+                    <li>Игровое поле или пространство для размещения зон</li>
+                </ul>
+            </div>
+            
+            <div class="rule-card">
+                <h2>
+                    <span class="svg-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M320 0a128 128 0 1 1 0 256 128 128 0 1 1 0-256zM40 64c22 0 40 18 40 40v160c0 17 7 33 19 45l51 52a25 25 0 1 0 35-35l-16-15-32-32a32 32 0 0 1 46-46l32 32 15 16 25 25c21 21 33 49 33 79v79c0 27-22 48-48 48h-67c-17 0-33-7-45-19L28 393a96 96 0 0 1-28-67V104c0-22 18-40 40-40zm560 0c22 0 40 18 40 40v222c0 25-10 49-28 67L512 493a64 64 0 0 1-45 19h-67c-26 0-48-21-48-48v-79c0-30 12-58 33-79l25-25 15-16 32-32a32 32 0 0 1 46 46l-32 32-16 15a25 25 0 1 0 35 35l51-51c12-12 19-29 19-46V104c0-22 18-40 40-40z"/></svg>
+                    </span>
+                    Подготовка
+                </h2>
+                <ol>
+                    <li>Каждый игрок получает 3 личные зоны: <span class="highlight">Актив</span>, <span class="highlight">Рука</span>, <span class="highlight">Сундук</span>.</li>
+                    <li>В <span class="highlight">Активе</span> каждый игрок кладет стопку из <span class="highlight">7 монет</span>.</li>
+                    <li><span class="highlight">Рука</span> и <span class="highlight">Сундук</span> вначале пусты.</li>
+                    <li>Содержимое <span class="highlight">Руки</span> - секретная информация.</li>
+                    <li>Содержимое <span class="highlight">Сундуков</span> - открытая информация.</li>
+                    <li>Положите визитку в центр стола, вниз стороной с маркером Инфляции.</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="phase-section">
+            <h2>Фазы раунда</h2>
+            
+            <div class="phase">
+                <h3><span class="phase-number">0</span> Пополнение Руки</h3>
+                <div class="phase-content">
+                    <p>Возьмите <span class="highlight">1 монету</span> из своего <span class="highlight">Актива</span> и положите ее в свою <span class="highlight">Руку</span>.</p>
+                    <p>В руке может быть <span class="highlight">несколько</span> монет.</p>
+                    <p><em>Если в Актив пуст, пропустите эту фазу.</em></p>
+                </div>
+            </div>
+            
+            <div class="phase">
+                <h3><span class="phase-number">1</span> Тайная Ставка</h3>
+                <div class="phase-content">
+                    <p>Для <span class="highlight">каждой монеты</span>, находящейся сейчас в вашей Руке, <span class="highlight">тайно</span> выберите сторону: <span class="highlight">Орел</span> или <span class="highlight">Решка</span>.</p>
+                    <p>Вы можете выбрать <span class="highlight">разные стороны</span> для разных монет в своей Руке.</p>
+                </div>
+            </div>
+            
+            <div class="phase">
+                <h3><span class="phase-number">2</span> Раскрытие Ставок</h3>
+                <div class="phase-content">
+                    <p>Все игроки <span class="highlight">одновременно</span> раскрывают ставки (монеты в Руках).</p>
+                    <p>Если ставка состоит из нескольких монет, разложите их перед собой так, чтобы всем была видна <span class="highlight">верхняя сторона</span> каждой монеты.</p>
+                </div>
+            </div>
+            
+            <div class="phase">
+                <h3><span class="phase-number">3</span> Определение Большинства</h3>
+                <div class="phase-content">                    
+                    <p>Посчитайте <span class="highlight">общее количество</span> монет со стороной <span class="highlight">Орел</span> и <span class="highlight">Решка</span>, раскрытых всеми игроками в этом раунде.</p>
+                    
+                    <p>Если одна из сторон представлена <span class="highlight">БОЛЬШЕ</span> раз, чем другая:</p>
+                    <ul>
+                        <li>Все монеты <span class="highlight">преобладающей стороны</span> отправляются из Руки в Сундук своего владельца</li>
+                        <li>Верхняя сторона монеты при этом <span class="highlight">не меняется</span></li>
+                        <li>Монеты <span class="highlight">меньшинства</span> остаются в Руке - так же, без смены верхней стороны</li>
+                    </ul>
+                </div>
+                    <div class="inflation-box">
+                        <h3 class="inflation-highlight" style="text-align: center; margin-bottom: 20px;">
+                            <span class="inline-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M64 64a32 32 0 1 0-64 0v336c0 44 36 80 80 80h400a32 32 0 1 0 0-64H80c-9 0-16-7-16-16V64zm407 87a32 32 0 0 0-46-46L320 211l-57-58a32 32 0 0 0-46 0L105 265a32 32 0 0 0 46 46l89-90 57 58c13 12 33 12 46 0l128-128z"/></svg>
+                            </span>
+                            Инфляция!
+                        </h3>
+                        
+                    <div style="text-align: center; margin-bottom: 20px; padding-top: 5px; border-top: 1px dashed rgba(155, 89, 182, 0.15);">
+                        <p>Инфляция - эффект, приводящий к отмене большинства.</p>
+                        <p>Условия возникновения:</p>
+                    </div>
+                        <div class="inflation-type inflation-equal">
+                            <div class="inflation-icon">
+                                <span class="svg-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M384 32h128a32 32 0 1 1 0 64H398c-5 26-23 47-46 57v295h160a32 32 0 1 1 0 64H128a32 32 0 1 1 0-64h160V153a80 80 0 0 1-46-57H128a32 32 0 1 1 0-64h128a80 80 0 0 1 128 0zm56 288h145l-73-124-72 124zm72 96c-63 0-115-34-126-79-3-11 1-22 7-32l95-163a28 28 0 0 1 48 0l95 163c6 10 10 21 7 32-11 45-63 79-126 79zM127 196 54 320h145l-72-124zM1 337c-3-11 1-22 7-32l95-163a28 28 0 0 1 48 0l95 163c6 10 9 21 7 32-11 45-63 79-126 79S12 382 1 337z"/></svg>
+                                </span>
+                            </div>
+                            <div>
+                                <h4>Равенство ставок</h4>
+                                <p>Если количество Орлов <span class="inflation-equal">РАВНО</span> количеству Решек - <span class="highlight">возникает Инфляция</span></p>
+                            </div>
+                        </div>
+                        
+                        <div class="inflation-type inflation-streak">
+                            <div class="inflation-icon">
+                                <span class="svg-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M105 203a160 160 0 0 1 264-60l17 17h-34a32 32 0 1 0 0 64h112c18 0 32-14 32-32V80a32 32 0 1 0-64 0v35l-18-17a224 224 0 0 0-369 83 32 32 0 0 0 60 22zm-66 86a32 32 0 0 0-23 31v112a32 32 0 1 0 64 0v-35l18 17a224 224 0 0 0 369-83 32 32 0 0 0-60-22 160 160 0 0 1-264 60l-17-17h34a32 32 0 1 0 0-64H48a39 39 0 0 0-9 1z"/></svg>
+                                </span>
+                            </div>
+                            <div>
+                                <h4>Повторное единство</h4>
+                                <p>Если все игроки выбрали <span class="inflation-streak">одинаковую сторону</span> для всех монет, маркер Инфляции становится активным (переверните визитку). Если при активном маркере Инфляции игроки опять оказались едины в своем выборе - <span class="highlight">возникает Инфляция</span></p>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px dashed rgba(155, 89, 182, 0.15);">
+                            <h4><span class="highlight">
+                                <span class="inline-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 32c14 0 27 8 35 20l216 368a40 40 0 0 1-35 60H40a40 40 0 0 1-34-60L222 52c7-12 20-20 34-20zm0 128c-13 0-24 11-24 24v112a24 24 0 1 0 48 0V184c0-13-11-24-24-24zm32 224a32 32 0 1 0-64 0 32 32 0 1 0 64 0z"/></svg>
+                                </span>
+                                Результат Инфляции
+                            </span></h4>
+                            <p>При возникновении Инфляции:</p>
+                                <p>◖   <span class="inflation-highlight">Большинства НЕТ</span>   ◗</p>
+                                <p>◖   <span class="inflation-highlight">ВСЕ</span> монеты остаются в Руках своих владельцев   ◗</p>
+                                <p>◖   Все монеты считаются монетами <span class="inflation-highlight">МЕНЬШИНСТВА</span>   ◗</p>
+                                <p>◖   Переверните визитку маркером Инфляции вниз (следующий раунд безопасен для единства выбора)   ◗</p>
+                        </div>
+                    </div>
+            </div>
+            
+            <div class="phase">
+                <h3><span class="phase-number">4</span> Эффекты Сторон</h3>
+                <div class="phase-content">
+                    <p>Только монеты, оставшиеся в вашей Руке после фазы 3 (монеты меньшинства), разыгрывают свои эффекты. <span class="inflation-highlight">В случае Инфляции это все монеты текущего раунда.</span></p>
+                    <p>Каждый игрок разыгрывает эффекты для своих монет <span class="highlight">по одной, в любом порядке</span>.</p>
+                    <p><span class="highlight">После розыгрыша эффекта монета ОСТАЕТСЯ в вашей Руке!</span></p>
+                    
+                    <p><strong>Эффекты:</strong></p>
+                    <ul>
+                        <li><span class="highlight">Орел:</span> Если в Активе есть монеты, возьмите 1 монету из Актива и положите в Сундук <span class="highlight">решкой вверх</span></li>
+                        <li><span class="highlight">Решка:</span> Если в Сундуке есть монеты, верните 1 любую монету из Сундука в Руку</li>
+                        <li>Если эффект невозможно выполнить, он <span class="highlight">пропускается</span></li>
+                    </ul>
+                    
+                    <p class="highlight">Эффекты Орла и Решки влияют ТОЛЬКО НА ВАШИ СОБСТВЕННЫЕ ЗОНЫ!</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="end-game">
+            <h2>КОНЕЦ ИГРЫ</h2>
+            <p>Игра заканчивается <span class="highlight">сразу</span>, когда у любого игрока в его Сундуке оказывается <span class="highlight">все 7 монет</span>.</p>
+            
+            <div class="phase">
+                <h3><span class="phase-number">!</span> Определение победителя</h3>
+                <div class="phase-content">
+                    <ol>
+                        <li>Игрок с <span class="highlight">наибольшим количеством монет, лежащих решкой вверх</span> в его Сундуке</li>
+                        <li>При равенстве: игрок, в Сундуке которого <span class="highlight">меньше всего монет, лежащих орлом вверх</span></li>
+                        <li>При полном равенстве: победитель определяется в <span class="highlight">поединке на гладиаторской арене с дикими львами</span></li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="gladiator-note">
+                <p>
+                    <span class="inline-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 32c14 0 27 8 35 20l216 368a40 40 0 0 1-35 60H40a40 40 0 0 1-34-60L222 52c7-12 20-20 34-20zm0 128c-13 0-24 11-24 24v112a24 24 0 1 0 48 0V184c0-13-11-24-24-24zm32 224a32 32 0 1 0-64 0 32 32 0 1 0 64 0z"/></svg>
+                    </span>
+                    Совет: Всегда имейте под рукой гладиаторские доспехи и прирученных львов на случай ничьей!
+                </p>
+            </div>
+        </div>
+        
+		<footer>
+			<p>2025 Решечный Гамбит | Стратегическая настольная игра | Правила могут быть уточнены перед началом игры | Желаем удачи в ваших тайных ставках!</p>
+			<div>Иконки: Font Awesome (CC BY 4.0)</div>
+		</footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const coinsContainer = document.getElementById('coinsContainer');
+            const coinsCount = 20;
+            
+            for (let i = 0; i < coinsCount; i++) {
+                const coin = document.createElement('div');
+                coin.classList.add('coin');
+                
+                if (Math.random() > 0.5) {
+                    coin.classList.add('heads');
+                } else {
+                    coin.classList.add('tails');
+                }
+                
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                
+                coin.style.left = `${posX}%`;
+                coin.style.top = `${posY}%`;
+                
+                const size = 30 + Math.random() * 40;
+                coin.style.width = `${size}px`;
+                coin.style.height = `${size}px`;
+                
+                const delay = Math.random() * 5;
+                coin.style.animationDelay = `${delay}s`;
+                
+                const duration = 5 + Math.random() * 10;
+                coin.style.animationDuration = `${duration}s`;
+                
+                coinsContainer.appendChild(coin);
+            }
+        });
+    </script>
+</body>
+</html>
